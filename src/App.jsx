@@ -142,10 +142,10 @@ function Dashboard({ onLogout, token }) {
     if (!token) return;
     const init = async () => {
       try {
-        const userRes = await fetch("http://localhost:3001/api/user", { headers: { Authorization: `Bearer ${token}` } });
+        const userRes = await fetch("https://deploykar-backend.onrender.com/api/user", { headers: { Authorization: `Bearer ${token}` } });
         const userData = await userRes.json();
         setUser(userData);
-        const reposRes = await fetch("http://localhost:3001/api/repos", { headers: { Authorization: `Bearer ${token}` } });
+        const reposRes = await fetch("https://deploykar-backend.onrender.com/api/repos", { headers: { Authorization: `Bearer ${token}` } });
         const reposData = await reposRes.json();
         setRepos(reposData);
         setLoading(false);
@@ -182,7 +182,7 @@ function Dashboard({ onLogout, token }) {
     setSelectedProject(null);
     setDeployStatus(prev => ({ ...prev, [repoName]: "QUEUED" }));
     try {
-      const res = await fetch("http://localhost:3001/api/deploy", {
+      const res = await fetch("https://deploykar-backend.onrender.com/api/deploy", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ repoUrl: repoInput, framework: frameworkSelect }),
@@ -199,7 +199,7 @@ function Dashboard({ onLogout, token }) {
         });
         const poll = setInterval(async () => {
           try {
-            const statusRes = await fetch(`http://localhost:3001/api/deploy-status/${data.deploymentId}`, { headers: { Authorization: `Bearer ${token}` } });
+            const statusRes = await fetch(`https://deploykar-backend.onrender.com/api/deploy-status/${data.deploymentId}`, { headers: { Authorization: `Bearer ${token}` } });
             const statusData = await statusRes.json();
             setDeployStatus(prev => ({ ...prev, [repoName]: statusData.status }));
             if (statusData.status === "READY" || statusData.status === "ERROR") clearInterval(poll);
@@ -600,7 +600,7 @@ export default function App() {
     }
   }, []);
 
-  if (showLanding && !isLoggedIn) return <LandingPage onGetStarted={() => window.location.href = "http://localhost:3001/auth/github"} />;
-  if (!isLoggedIn) return <LoginPage onLogin={() => window.location.href = "http://localhost:3001/auth/github"} />;
+  if (showLanding && !isLoggedIn) return <LandingPage onGetStarted={() => window.location.href = "https://deploykar-backend.onrender.com/auth/github"} />;
+  if (!isLoggedIn) return <LoginPage onLogin={() => window.location.href = "https://deploykar-backend.onrender.com/auth/github"} />;
   return <Dashboard token={token} onLogout={() => { localStorage.removeItem("dk_token"); setIsLoggedIn(false); setToken(null); setShowLanding(true); }} />;
 }
