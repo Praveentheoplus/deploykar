@@ -72,8 +72,15 @@ function LoginPage({ onLogin }) {
           .stats-grid{grid-template-columns:repeat(2,1fr) !important}
           .project-meta{display:none !important}
           .topbar-breadcrumb{display:none !important}
+          .project-card{flex-wrap:wrap !important}
+          .search-bar{width:140px !important}
         }
-        @media(max-width:480px){.project-url{display:none !important}}
+        @media(max-width:480px){
+          .project-url{display:none !important}
+          .stats-grid{grid-template-columns:repeat(2,1fr) !important}
+          .new-deploy-text{display:none !important}
+          .search-bar{width:110px !important}
+        }
       `}</style>
       <div style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none" }}>
         {Array.from({length:12}).map((_,i) => <div key={`h${i}`} style={{ position:"absolute", width:"100%", height:1, top:`${(i+1)*8.33}%`, background:"rgba(99,179,237,0.04)" }} />)}
@@ -137,6 +144,7 @@ function Dashboard({ onLogout, token }) {
   const [deployStatus, setDeployStatus] = useState({});
   const [historyLoading, setHistoryLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!token) return;
@@ -274,7 +282,7 @@ function Dashboard({ onLogout, token }) {
         <div style={{ flex:1, display:"flex", flexDirection:"column", overflow:"hidden", minWidth:0 }}>
           <header style={{ height:56, background:"#0a0d13", borderBottom:"1px solid #12181f", display:"flex", alignItems:"center", padding:"0 16px", justifyContent:"space-between", flexShrink:0, width:"100%" }}>
             <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-              <button className="icon-btn" onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background:"transparent", border:"none", color:"#64748b", cursor:"pointer", padding:"6px 8px", borderRadius:6, fontSize:16 }}>☰</button>
+              <button className="icon-btn" onClick={() => { if(window.innerWidth<=768){setMobileMenu(!mobileMenu);}else{setSidebarOpen(!sidebarOpen);}}} style={{ background:"transparent", border:"none", color:"#64748b", cursor:"pointer", padding:"6px 8px", borderRadius:6, fontSize:16 }}>☰</button>
               <div className="topbar-breadcrumb" style={{ display:"flex", alignItems:"center", gap:6 }}>
                 <span style={{ color:"#64748b", fontSize:12 }}>dashboard</span>
                 <span style={{ color:"#1e2530", fontSize:12 }}>/</span>
@@ -284,7 +292,7 @@ function Dashboard({ onLogout, token }) {
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
               <button className="icon-btn" style={{ background:"transparent", border:"none", color:"#64748b", cursor:"pointer", padding:"6px 8px", borderRadius:6, fontSize:14 }}>🔔</button>
               <button className="btn-primary" onClick={() => setDeployModal(true)} style={{ background:"#63b3ed", color:"#080b10", border:"none", borderRadius:7, padding:"7px 14px", fontSize:12, fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontFamily:"'JetBrains Mono',monospace", whiteSpace:"nowrap" }}>
-                <span style={{ fontSize:14 }}>+</span><span>New Deploy</span>
+                <span style={{ fontSize:14 }}>+</span><span className="new-deploy-text">New Deploy</span>
               </button>
             </div>
           </header>
@@ -312,9 +320,23 @@ function Dashboard({ onLogout, token }) {
                   ))}
                 </div>
 
-                <div style={{ marginBottom:12, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div style={{ marginBottom:12, display:"flex", justifyContent:"space-between", alignItems:"center", gap:12, flexWrap:"wrap" }}>
                   <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:14, fontWeight:700, color:"#e2e8f0" }}>Projects <span style={{ color:"#475569", fontWeight:400 }}>({displayProjects.length})</span></h2>
-                  <div style={{ fontSize:11, color:"#475569" }}>Sort: Recent ▾</div>
+                  <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                    <div style={{ position:"relative" }}>
+                      <span style={{ position:"absolute", left:10, top:"50%", transform:"translateY(-50%)", color:"#475569", fontSize:12 }}>⌕</span>
+                      <input
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder="Search repos..."
+                        className="search-bar" style={{ background:"#0d1117", border:"1px solid #1e2530", borderRadius:7, padding:"6px 12px 6px 28px", color:"#e2e8f0", fontSize:11, fontFamily:"'JetBrains Mono',monospace", outline:"none", width:180 }}
+                      />
+                      {searchQuery && (
+                        <button onClick={() => setSearchQuery("")} style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"transparent", border:"none", color:"#475569", cursor:"pointer", fontSize:12 }}>✕</button>
+                      )}
+                    </div>
+                    <div style={{ fontSize:11, color:"#475569" }}>Sort: Recent ▾</div>
+                  </div>
                 </div>
 
                 {loading && (
@@ -332,9 +354,25 @@ function Dashboard({ onLogout, token }) {
                   </div>
                 )}
 
+                {!loading && searchQuery && displayProjects.filter(p =>
+                  p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  p.repo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  p.framework.toLowerCase().includes(searchQuery.toLowerCase())
+                ).length === 0 && (
+                  <div style={{ textAlign:"center", padding:"40px 0", color:"#475569" }}>
+                    <div style={{ fontSize:32, marginBottom:12 }}>⌕</div>
+                    <div style={{ fontSize:13, marginBottom:8 }}>No repos found for "<span style={{ color:"#63b3ed" }}>{searchQuery}</span>"</div>
+                    <button onClick={() => setSearchQuery("")} style={{ background:"transparent", border:"1px solid #1e2530", color:"#64748b", borderRadius:7, padding:"6px 14px", fontSize:11, cursor:"pointer", fontFamily:"'JetBrains Mono',monospace" }}>Clear search</button>
+                  </div>
+                )}
+
                 {!loading && (
                   <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-                    {displayProjects.map(p => {
+                    {displayProjects.filter(p =>
+                      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      p.repo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      p.framework.toLowerCase().includes(searchQuery.toLowerCase())
+                    ).map(p => {
                       const cardStatus = getCardStatus(p.name);
                       const currentDeployStatus = deployStatus[p.name];
                       const isDeploying = ["BUILDING","QUEUED","INITIALIZING"].includes(currentDeployStatus);
@@ -458,7 +496,7 @@ function Dashboard({ onLogout, token }) {
       {/* ─── Deploy Modal ─────────────────────────────────── */}
       {deployModal && (
         <div className="modal-overlay" style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:100, backdropFilter:"blur(4px)", padding:16 }} onClick={() => setDeployModal(false)}>
-          <div onClick={e => e.stopPropagation()} style={{ background:"#0d1117", border:"1px solid #1e2530", borderRadius:14, padding:28, width:"100%", maxWidth:440, animation:"slideIn 0.2s ease" }}>
+          <div onClick={e => e.stopPropagation()} className="modal-inner" style={{ background:"#0d1117", border:"1px solid #1e2530", borderRadius:14, padding:28, width:"100%", maxWidth:440, animation:"slideIn 0.2s ease" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
               <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:16, fontWeight:700 }}>New Deployment</h3>
               <button onClick={() => setDeployModal(false)} style={{ background:"transparent", border:"none", color:"#64748b", cursor:"pointer", fontSize:18, padding:4 }}>✕</button>
