@@ -67,14 +67,14 @@ function LoginPage({ onLogin }) {
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:#1e2530;border-radius:4px}
         @media(max-width:768px){
-          .sidebar{position:fixed !important;top:0;left:0;height:100vh;z-index:50;transform:translateX(-100%);transition:transform 0.25s ease !important;width:220px !important}
-          .sidebar.open{transform:translateX(0) !important}
-          .stats-grid{grid-template-columns:repeat(2,1fr) !important}
-          .project-meta{display:none !important}
-          .topbar-breadcrumb{display:none !important}
-          .project-card{flex-wrap:wrap !important}
-          .search-bar{width:140px !important}
-        }
+  .sidebar{position:fixed !important;top:0;left:0;height:100vh;z-index:50;transform:translateX(-100%);transition:transform 0.25s ease !important;width:220px !important;min-width:0 !important}
+  .sidebar.open{transform:translateX(0) !important}
+  .stats-grid{grid-template-columns:repeat(2,1fr) !important}
+  .project-meta{display:none !important}
+  .topbar-breadcrumb{display:none !important}
+  .project-card{flex-wrap:wrap !important}
+  .search-bar{width:140px !important}
+}
         @media(max-width:480px){
           .project-url{display:none !important}
           .stats-grid{grid-template-columns:repeat(2,1fr) !important}
@@ -250,8 +250,7 @@ function Dashboard({ onLogout, token }) {
       <div style={{ display:"flex", flex:1, overflow:"hidden", width:"100%" }}>
 
         {/* Sidebar */}
-        <aside className={`sidebar ${mobileMenu?"open":""}`} style={{ width:sidebarOpen?220:60, background:"#0a0d13", borderRight:"1px solid #12181f", display:"flex", flexDirection:"column", overflow:"hidden", flexShrink:0, height:"100vh" }}>
-          <div style={{ padding:"18px 16px", display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid #12181f", flexShrink:0 }}>
+<aside className={`sidebar ${mobileMenu?"open":""}`} style={{ width:sidebarOpen?220:60, background:"#0a0d13", borderRight:"1px solid #12181f", display:"flex", flexDirection:"column", overflow:"hidden", flexShrink:0, height:"100vh", ...(window.innerWidth<=768 && !mobileMenu ? {width:0, minWidth:0} : {}) }}>          <div style={{ padding:"18px 16px", display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid #12181f", flexShrink:0 }}>
             <div style={{ width:32, height:32, borderRadius:8, flexShrink:0, background:"linear-gradient(135deg,#63b3ed,#00ff88)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:700, color:"#080b10" }}>D</div>
             {sidebarOpen && <span style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:16, whiteSpace:"nowrap", color:"#e2e8f0" }}>deploykar</span>}
           </div>
