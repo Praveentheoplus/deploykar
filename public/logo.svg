@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img">
+  <title>Deploykar</title>
+  <defs>
+    <linearGradient id="rocketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#63b3ed"/>
+      <stop offset="100%" stop-color="#00ff88"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ff4d6d" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="topLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="30%" stop-color="#63b3ed"/>
+      <stop offset="70%" stop-color="#00ff88"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#0d1117"/>
+
+  <!-- Top accent line -->
+  <rect x="106" y="0" width="300" height="3" rx="1" fill="url(#topLine)"/>
+
+  <!-- Code brackets -->
+  <text x="118" y="310" font-size="80" font-family="monospace" font-weight="700" fill="#1e2530" text-anchor="middle">{</text>
+  <text x="394" y="310" font-size="80" font-family="monospace" font-weight="700" fill="#1e2530" text-anchor="middle">}</text>
+
+  <!-- Rocket body -->
+  <path d="M256 80 C256 80 216 130 214 200 L214 270 L256 292 L298 270 L298 200 C296 130 256 80 256 80Z" fill="url(#rocketGrad)"/>
+
+  <!-- Rocket nose -->
+  <ellipse cx="256" cy="84" rx="18" ry="12" fill="#63b3ed"/>
+
+  <!-- Window -->
+  <circle cx="256" cy="195" r="22" fill="#0d1117" stroke="#63b3ed" stroke-width="2.5"/>
+  <circle cx="256" cy="195" r="11" fill="#080b10" stroke="#00ff88" stroke-width="2"/>
+  <circle cx="262" cy="189" r="3" fill="#00ff88" opacity="0.8"/>
+
+  <!-- Left fin -->
+  <path d="M214 255 L182 286 L214 278Z" fill="#4facde"/>
+
+  <!-- Right fin -->
+  <path d="M298 255 L330 286 L298 278Z" fill="#4facde"/>
+
+  <!-- Flame -->
+  <path d="M232 292 C232 292 222 325 226 345 C235 330 244 355 256 362 C268 355 277 330 286 345 C290 325 280 292 280 292Z" fill="url(#flameGrad)" opacity="0.95"/>
+  <path d="M242 298 C242 298 236 320 242 335 C249 322 256 340 256 340 C256 340 263 322 270 335 C276 320 270 298 270 298Z" fill="#febc2e" opacity="0.9"/>
+
+  <!-- Stars -->
+  <circle cx="170" cy="145" r="3" fill="#63b3ed" opacity="0.6"/>
+  <circle cx="188" cy="175" r="2" fill="#00ff88" opacity="0.5"/>
+  <circle cx="178" cy="210" r="1.5" fill="#63b3ed" opacity="0.4"/>
+  <circle cx="342" cy="140" r="3" fill="#00ff88" opacity="0.6"/>
+  <circle cx="324" cy="172" r="2" fill="#63b3ed" opacity="0.5"/>
+  <circle cx="336" cy="208" r="1.5" fill="#00ff88" opacity="0.4"/>
+
+  <!-- Orbit arc -->
+  <ellipse cx="256" cy="210" rx="90" ry="26" fill="none" stroke="#1e2530" stroke-width="1.5" stroke-dasharray="5 7"/>
+
+  <!-- Wordmark -->
+  <text x="256" y="430" font-family="sans-serif" font-weight="800" font-size="62" fill="#e2e8f0" text-anchor="middle">deploykar</text>
+
+  <!-- Tagline -->
+  <text x="256" y="468" font-family="sans-serif" font-weight="600" font-size="16" fill="#475569" text-anchor="middle" letter-spacing="5">DEPLOY · SHIP</text>
+</svg>
